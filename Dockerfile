@@ -1,5 +1,3 @@
-
-# Stage 1: Build WAR file
 FROM maven:3.9-eclipse-temurin-17 AS buildstage
 
 WORKDIR /app
@@ -8,15 +6,12 @@ COPY src ./src
 
 RUN mvn clean package
 
-# Stage 2: Deploy WAR to Tomcat
 FROM tomcat:10.1-jdk17
 
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-COPY --from=buildstage /app/target/*.war \
-    /usr/local/tomcat/webapps/ROOT.war
+COPY --from=buildstage /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 8080
 
 CMD ["catalina.sh", "run"]
-
