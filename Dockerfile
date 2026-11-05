@@ -1,14 +1,17 @@
+FROM maven:3.9-eclipse-temurin-17 AS buildstage
 
-##artifact build stage
-FROM maven AS buildstage
-RUN mkdir /opt/End-to-End
-WORKDIR /opt/End-to-End
-COPY . .
-RUN mvn clean install    ## artifact -- .war
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
 
-### tomcat deploy stage
-FROM tomcat
-WORKDIR webapps
-COPY --from=buildstage /opt/End-to-end/target/*.war .
-RUN rm -rf ROOT && mv *.war ROOT.war
+RUN mvn clean package
+
+FROM tomcat:10.1-jdk17
+
+RUN rm -rf /usr/local/tomcat/webapps/*
+
+COPY --from=buildstage /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
+
 EXPOSE 8080
+
+CMD ["catalina.sh", "run"]

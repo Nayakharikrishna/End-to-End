@@ -9,7 +9,7 @@ spec:
   replicas: 4
   selector:
     matchLabels:
-      app: deo
+      app: demo
   template:
     metadata:
       labels:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: demo
-        image: 
+        image: hari52/demo:v1-9
         ports:
         - containerPort: 8080
 
