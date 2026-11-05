@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: demo
-        image: hari52/demo:v1-41
+        image: hari52/demo:v1-42
         ports:
         - containerPort: 8080
 
